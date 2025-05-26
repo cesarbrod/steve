@@ -1,0 +1,5 @@
+{
+  "name": "Le Poisson Steve",
+  "description": "A children's game (vanilla JS, HTML, CSS) where 'Steve' (a fish character) is moved between teleportation pods, each applying an effect or changing Steve and pod layout.",
+  "requestFramePermissions": []
+}

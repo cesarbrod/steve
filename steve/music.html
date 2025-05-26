@@ -1,0 +1,33 @@
+<html>
+<body>
+    
+            <audio id="bgMusic" loop preload="auto">
+        <source src="steve.ogg" type="audio/ogg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        let musicStarted = false;
+        
+        function startMusic() {
+            if (!musicStarted) {
+                const audio = document.getElementById('bgMusic');
+                const overlay = document.getElementById('overlay');
+                
+                audio.play().then(() => {
+                    overlay.style.display = 'none';
+                    musicStarted = true;
+                }).catch(err => {
+                    console.log('Audio play failed:', err);
+                });
+            }
+        }
+        
+        // Listen for any keypress
+        document.addEventListener('keydown', startMusic);
+        
+        // Also listen for clicks as backup
+        document.addEventListener('click', startMusic);
+    </script>
+</body>
+</html>

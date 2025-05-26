@@ -1,0 +1,232 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Le Poisson Steve</title>
+  <link rel="stylesheet" href="style.css">
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.1.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.1.0/",
+    "react/": "https://esm.sh/react@^19.1.0/"
+  }
+}
+</script>
+<style>
+/* Mobile Controls Styles */
+.mobile-controls {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: none;
+  z-index: 1000;
+}
+
+.mobile-controls.show {
+  display: block;
+}
+
+.arrow-pad {
+  position: relative;
+  width: 150px;
+  height: 150px;
+}
+
+.arrow-btn {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 165, 0, 0.8);
+  border: 2px solid #ff8c00;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.1s ease;
+  touch-action: manipulation;
+}
+
+.arrow-btn:active {
+  background: rgba(255, 140, 0, 1);
+  transform: scale(0.95);
+}
+
+.arrow-btn svg {
+  width: 24px;
+  height: 24px;
+  fill: white;
+}
+
+.arrow-up {
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.arrow-down {
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.arrow-left {
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.arrow-right {
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Hide controls on desktop */
+@media (min-width: 768px) {
+  .mobile-controls {
+    display: none !important;
+  }
+}
+</style>
+
+</head>
+<body>
+    
+            <audio id="bgMusic" loop preload="auto">
+        <source src="steve.ogg" type="audio/ogg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        let musicStarted = false;
+        
+        function startMusic() {
+            if (!musicStarted) {
+                const audio = document.getElementById('bgMusic');
+                const overlay = document.getElementById('overlay');
+                
+                audio.play().then(() => {
+                    overlay.style.display = 'none';
+                    musicStarted = true;
+                }).catch(err => {
+                    console.log('Audio play failed:', err);
+                });
+            }
+        }
+        
+        // Listen for any keypress
+        document.addEventListener('keydown', startMusic);
+        
+        // Also listen for clicks as backup
+        document.addEventListener('click', startMusic);
+    </script>
+    
+    
+  <div id="game-container">
+    <header>
+      <h1 id="game-title">Le Poisson Steve</h1>
+      <p id="instruction-text">Use as setinhas para movimentar o Steve!</p>
+    </header>
+    <main id="game-area">
+      <div id="character">
+        <!-- Steve (SVG) will be injected here -->
+      </div>
+      <!-- Teleportation pods will be dynamically added here -->
+    </main>
+    <footer id="game-footer">
+      <p>Personagem baseado em "Le Poisson Steve" (Steve, o Peixe), de @vigzvigz.</p>
+      <p>A música é de @tomomp3</p>
+    </footer>
+  </div>
+
+  <!-- Mobile Touch Controls -->
+  <div class="mobile-controls" id="mobileControls">
+    <div class="arrow-pad">
+      <button class="arrow-btn arrow-up" data-key="ArrowUp">
+        <svg viewBox="0 0 24 24">
+          <path d="M7 14l5-5 5 5z"/>
+        </svg>
+      </button>
+      <button class="arrow-btn arrow-down" data-key="ArrowDown">
+        <svg viewBox="0 0 24 24">
+          <path d="M7 10l5 5 5-5z"/>
+        </svg>
+      </button>
+      <button class="arrow-btn arrow-left" data-key="ArrowLeft">
+        <svg viewBox="0 0 24 24">
+          <path d="M14 7l-5 5 5 5z"/>
+        </svg>
+      </button>
+      <button class="arrow-btn arrow-right" data-key="ArrowRight">
+        <svg viewBox="0 0 24 24">
+          <path d="M10 7l5 5-5 5z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // Mobile Controls JavaScript
+    function isMobileDevice() {
+      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+             ('ontouchstart' in window) || 
+             (navigator.maxTouchPoints > 0);
+    }
+
+    function simulateKeyPress(key) {
+      const event = new KeyboardEvent('keydown', {
+        key: key,
+        code: key,
+        which: key === 'ArrowUp' ? 38 : key === 'ArrowDown' ? 40 : key === 'ArrowLeft' ? 37 : 39,
+        keyCode: key === 'ArrowUp' ? 38 : key === 'ArrowDown' ? 40 : key === 'ArrowLeft' ? 37 : 39
+      });
+      document.dispatchEvent(event);
+    }
+
+    // Show mobile controls if on mobile device
+    if (isMobileDevice()) {
+      document.getElementById('mobileControls').classList.add('show');
+      
+      // Update instruction text for mobile
+      document.getElementById('instruction-text').textContent = 'Use as setas na tela ou do teclado para movimentar o Steve!';
+    }
+
+    // Add touch event listeners to arrow buttons
+    document.querySelectorAll('.arrow-btn').forEach(btn => {
+      const key = btn.getAttribute('data-key');
+      
+      // Handle touch start
+      btn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        simulateKeyPress(key);
+      });
+      
+      // Handle mouse click as fallback
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        simulateKeyPress(key);
+      });
+      
+      // Prevent context menu on long press
+      btn.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+      });
+    });
+
+    // Prevent scrolling when touching the controls
+    document.querySelector('.mobile-controls').addEventListener('touchmove', (e) => {
+      e.preventDefault();
+    }, { passive: false });
+  </script>
+
+  
+      <script src="script.js"></script>
+</body>
+</html><link rel="stylesheet" href="index.css">
+<script src="index.tsx" type="module"></script>

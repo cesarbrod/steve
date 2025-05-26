@@ -1,0 +1,144 @@
+/* General Page Styles */
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background-color: #f0f8ff; /* AliceBlue - a light, friendly background */
+  color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  overflow: hidden; /* Prevent scrollbars if game is too large */
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+#game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient(135deg, #87CEEB, #4682B4); /* SkyBlue to SteelBlue */
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  width: 95vw;
+  max-width: 700px; /* Max game width */
+}
+
+header {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+#game-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+  margin: 0 0 5px 0;
+}
+
+#instruction-text {
+  font-size: 1.1rem;
+  color: #e0f2fe; /* Lighter blue for contrast */
+  margin: 0;
+}
+
+/* Game Area */
+#game-area {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background-color: rgba(255, 255, 255, 0.25); /* Semi-transparent white */
+  backdrop-filter: blur(5px);
+  border-radius: 10px;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+  border: 3px solid rgba(255, 255, 255, 0.6);
+  overflow: hidden; /* Crucial for positioning pods and character */
+}
+
+/* Character (Steve) */
+#character {
+  position: absolute;
+  width: 60px; /* Adjusted CHARACTER_SIZE from JS */
+  height: 60px; /* Adjusted CHARACTER_SIZE from JS */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  z-index: 10;
+  transition: left 0.05s linear, top 0.05s linear, transform 0.3s ease-out, filter 0.3s ease-out, opacity 0.3s ease-out;
+  opacity: 0; /* Start invisible for teleport-in effect */
+  will-change: transform, filter, opacity, left, top;
+}
+
+#character svg {
+  display: block; /* Removes extra space under SVG */
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(2px 3px 2px rgba(0,0,0,0.25));
+}
+
+/* Pods */
+.pod {
+  position: absolute;
+  width: 90px; /* Adjusted POD_SIZE from JS */
+  height: 90px; /* Adjusted POD_SIZE from JS */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  border: 3px dashed rgba(255,255,255,0.7);
+  border-radius: 12px;
+  color: white;
+  text-align: center;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.15);
+  transition: background-color 0.3s ease, transform 0.3s ease, top 0.5s ease-out, left 0.5s ease-out, right 0.5s ease-out, bottom 0.5s ease-out;
+  font-size: 2.5rem; /* For the icon */
+  box-sizing: border-box;
+  cursor: pointer; /* Indicate they are interactive (though movement is key based) */
+  will-change: transform, background-color, top, left, right, bottom;
+}
+
+.pod-icon {
+    pointer-events: none; /* Ensure icon doesn't interfere with pod detection if any */
+}
+
+/* Pod Colors */
+.pod-color-blue { background-color: rgba(59, 130, 246, 0.8); } /* blue-500 */
+.pod-color-blue:hover { background-color: rgba(37, 99, 235, 0.9); } /* blue-600 */
+
+.pod-color-green { background-color: rgba(16, 185, 129, 0.8); } /* green-500 */
+.pod-color-green:hover { background-color: rgba(5, 150, 105, 0.9); } /* green-600 */
+
+.pod-color-gray { background-color: rgba(107, 114, 128, 0.8); } /* gray-500 */
+.pod-color-gray:hover { background-color: rgba(75, 85, 99, 0.9); } /* gray-600 */
+
+.pod-color-purple { background-color: rgba(139, 92, 246, 0.8); } /* purple-500 */
+.pod-color-purple:hover { background-color: rgba(124, 58, 237, 0.9); } /* purple-600 */
+
+/* Footer */
+#game-footer {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+#game-footer p {
+  margin: 3px 0;
+}
+
+/* Loading State */
+#loading-message {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0,0,0,0.5);
+    color: white;
+    font-size: 1.5rem;
+    z-index: 100;
+}
